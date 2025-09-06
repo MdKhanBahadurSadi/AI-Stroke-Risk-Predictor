@@ -7,10 +7,16 @@ import os
 
 app = Flask(__name__, template_folder="templates")
 
+# Path to the directory containing the files
+current_dir = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(current_dir, "stroke_model.pkl")
+encoders_path = os.path.join(current_dir, "label_encoders.pkl")
+
+# Load ML model and label encoders
 try:
-    with open("stroke_model.pkl", "rb") as f:
+    with open(model_path, "rb") as f:
         model = pickle.load(f)
-    with open("label_encoders.pkl", "rb") as f:
+    with open(encoders_path, "rb") as f:
         encoders = pickle.load(f)
 except FileNotFoundError:
     print("Error: Model and encoder files not found. Please ensure 'stroke_model.pkl' and 'label_encoders.pkl' are in the same directory.")
