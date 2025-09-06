@@ -4,7 +4,12 @@
       "src": "app.py",
       "use": "@vercel/python",
       "config": {
-        "maxLambdaSize": "15mb"
+        "maxLambdaSize": "15mb",
+        "includeFiles": [
+          "templates/**",
+          "stroke_model.pkl",
+          "label_encoders.pkl"
+        ]
       }
     }
   ],
