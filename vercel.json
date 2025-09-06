@@ -1,0 +1,34 @@
+{
+  "version": 3,
+  "builds": [
+    {
+      "src": "StrokeProject/app.py",
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": [
+          "StrokeProject/stroke_model.pkl",
+          "StrokeProject/label_encoders.pkl",
+          "StrokeProject/templates/**"
+        ]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "StrokeProject/app.py"
+    }
+  ],
+  "functions": {
+    "StrokeProject/app.py": {
+      "runtime": "python3.11",
+      "maxDuration": 10,
+      "memory": 512,
+      "includeFiles": [
+        "StrokeProject/stroke_model.pkl",
+        "StrokeProject/label_encoders.pkl",
+        "StrokeProject/templates/**"
+      ]
+    }
+  }
+}
