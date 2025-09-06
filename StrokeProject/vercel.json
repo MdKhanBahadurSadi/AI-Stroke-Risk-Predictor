@@ -18,5 +18,15 @@
       "src": "/(.*)",
       "dest": "app.py"
     }
-  ]
+  ],
+  "functions": {
+    "app.py": {
+      "runtime": "python3.11",
+      "maxDuration": 10,
+      "memory": 512,
+      "includeFiles": ["stroke_model.pkl", "label_encoders.pkl", "templates/**"],
+      "handler": "app.py",
+      "startCommand": "gunicorn app:app"
+    }
+  }
 }
