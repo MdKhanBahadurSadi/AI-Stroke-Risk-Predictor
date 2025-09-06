@@ -5,9 +5,10 @@ import requests
 import json
 import os
 
-app = Flask(__name__)
+# Flask app
+app = Flask(__name__, template_folder="templates")
 
-
+# Load ML model and label encoders
 try:
     with open("stroke_model.pkl", "rb") as f:
         model = pickle.load(f)
@@ -18,6 +19,7 @@ except FileNotFoundError:
     model = None
     encoders = None
 
+# Gemini API config
 GEMINI_API_KEY = "AIzaSyC5QBVqPD8dHZ8690SJf6IjJQtILQBPdck"
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent"
 
@@ -44,19 +46,17 @@ def get_gemini_suggestion(prompt_text):
         print(f"Error calling Gemini API: {e}")
         return "Error getting suggestion"
 
-
+# Routes
 @app.route("/")
 @app.route("/index.html")
 def index():
     return render_template("index.html")
-
 
 @app.route("/verification.html", methods=["GET", "POST"])
 def verification():
     if request.method == "POST":
         return redirect(url_for("main"))
     return render_template("verification.html")
-
 
 @app.route("/main.html", methods=["GET", "POST"])
 def main():
@@ -105,5 +105,7 @@ def main():
     
     return render_template("main.html", prediction=prediction, suggestion=suggestion, probability=probability)
 
+# Vercel-compatible run
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
