@@ -2,13 +2,13 @@
   "version": 3,
   "builds": [
     {
-      "src": "app.py",
+      "src": "StrokeProject/app.py",
       "use": "@vercel/python",
       "config": {
         "includeFiles": [
-          "stroke_model.pkl",
-          "label_encoders.pkl",
-          "templates/**"
+          "StrokeProject/stroke_model.pkl",
+          "StrokeProject/label_encoders.pkl",
+          "StrokeProject/templates/**"
         ]
       }
     }
@@ -16,17 +16,19 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "app.py"
+      "dest": "StrokeProject/app.py"
     }
   ],
   "functions": {
-    "app.py": {
+    "StrokeProject/app.py": {
       "runtime": "python3.11",
       "maxDuration": 10,
       "memory": 512,
-      "includeFiles": ["stroke_model.pkl", "label_encoders.pkl", "templates/**"],
-      "handler": "app.py",
-      "startCommand": "gunicorn app:app"
+      "includeFiles": [
+        "StrokeProject/stroke_model.pkl",
+        "StrokeProject/label_encoders.pkl",
+        "StrokeProject/templates/**"
+      ]
     }
   }
 }
