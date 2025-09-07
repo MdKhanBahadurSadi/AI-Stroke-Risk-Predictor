@@ -37,7 +37,6 @@
             padding: 20px;
         }
 
-
         .container {
             max-width: 1000px;
             margin: auto;
@@ -56,6 +55,7 @@
             position: relative;
             overflow: hidden;
             animation: fadeInDown 1s ease-out;
+            opacity: 0.95;
         }
 
         .header::before {
@@ -91,6 +91,7 @@
             box-shadow: 0 15px 40px var(--shadow-light);
             overflow: hidden;
             transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            opacity: 0.9;
         }
 
         .card:hover {
@@ -162,6 +163,7 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             margin-top: 30px;
             box-shadow: 0 5px 20px rgba(46, 204, 113, 0.3);
+            opacity: 0.95;
         }
 
         .btn-predict:hover {
@@ -178,7 +180,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(8px);
             align-items: center;
             justify-content: center;
@@ -202,6 +204,7 @@
             animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-align: center;
             position: relative;
+            opacity: 0.95;
         }
 
         @keyframes zoomIn {
@@ -488,13 +491,12 @@
         document.getElementById("resultModal").style.display = "none";
     }
 
-    {% if prediction %}
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("resultModal").style.display = "flex";
-        });
-    {% endif %}
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("resultModal").style.display = "flex";
+    });
+    
 </script>
 
 </body>
-
 </html>
