@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stroke Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --background-light: #ecf0f1;
+            --background-dark: #bdc3c7;
+            --card-background: #ffffff;
+            --text-color: #34495e;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-heavy: rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: url('https://wallpapercave.com/wp/wp11352696.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 2.5rem 1rem;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px var(--shadow-heavy);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInDown 1s ease-out;
+            opacity: 0.95;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.05);
+            transform: rotate(30deg);
+            z-index: 0;
+        }
+
+        .header h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
+            background: var(--card-background);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px var(--shadow-light);
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            opacity: 0.9;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+        }
+
+        .form-section {
+            padding: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid var(--background-dark);
+            border-radius: 10px;
+            font-size: 1rem;
+            color: var(--text-color);
+            background-color: var(--background-light);
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-predict {
+            display: block;
+            width: 100%;
+            padding: 18px 20px;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            margin-top: 30px;
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.3);
+            opacity: 0.95;
+        }
+
+        .btn-predict:hover {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: var(--card-background);
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            position: relative;
+            opacity: 0.95;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-btn {
+            color: var(--background-dark);
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .modal h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .result-box {
+            background: var(--background-light);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .result-box strong {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .prediction-result {
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .suggestion {
+            border-left: 5px solid #f39c12;
+        }
+
+        .probability {
+            font-weight: 600;
+            color: var(--accent-color);
+            font-size: 1.3rem;
+            margin-top: 20px;
+            background: rgba(231, 76, 60, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .icon-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        .result-icon {
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .suggestion-icon {
+            color: #f39c12;
+            border: 2px solid #f39c12;
+        }
+
+        .icon-circle.danger-icon {
+            background: #fde6e6;
+            color: var(--accent-color);
+            border: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(52, 152, 219, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+        }
+
+        .prediction-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 2rem 1rem;
+            }
+            .form-section {
+                padding: 30px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-heartbeat mr-2"></i>AI Stroke Risk Predictor</h1>
+        <p>Empower yourself with insights into your cardiovascular health.</p>
+    </div>
+    
+    <div class="card">
+        <div class="form-section">
+            <form action="{{ url_for('main') }}" method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-venus-mars input-icon"></i>
+                            <select id="gender" name="gender" required>
+                                <option value="1">Male</option>
+                                <option value="0">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-birthday-cake input-icon"></i>
+                            <input type="number" id="age" name="age" step="1" placeholder="e.g., 45" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hypertension">Hypertension</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-tint input-icon"></i>
+                            <select id="hypertension" name="hypertension" required>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="heart_disease">Heart Disease</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-heart input-icon"></i>
+                            <select id="heart_disease" name="heart_disease" required>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ever_married">Ever Married</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-ring input-icon"></i>
+                            <select id="ever_married" name="ever_married" required>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="work_type">Work Type</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-briefcase input-icon"></i>
+                            <select id="work_type" name="work_type" required>
+                                <option value="0">Government Job</option>
+                                <option value="2">Private</option>
+                                <option value="3">Self-employed</option>
+                                <option value="4">Children</option>
+                                <option value="1">Never Worked</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="residence">Residence Type</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-home input-icon"></i>
+                            <select id="residence" name="residence" required>
+                                <option value="Urban">Urban</option>
+                                <option value="Rural">Rural</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="glucose">Average Glucose Level</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-flask input-icon"></i>
+                            <input type="number" id="glucose" name="glucose" step="0.01" placeholder="e.g., 85.0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bmi">BMI</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-ruler-vertical input-icon"></i>
+                            <input type="number" id="bmi" name="bmi" step="0.01" placeholder="e.g., 24.5" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="smoking">Smoking Status</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-smoking input-icon"></i>
+                            <select id="smoking" name="smoking" required>
+                                <option value="0">Unknown</option>
+                                <option value="1">Formerly Smoked</option>
+                                <option value="2">Never Smoked</option>
+                                <option value="3">Smokes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-predict">
+                    <i class="fas fa-search mr-2"></i>Predict Risk
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if prediction %}
+
+<div id="resultModal" class="modal" style="display: flex;">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2><i class="fas fa-chart-line mr-2"></i>Your Health Assessment</h2>
+        
+        <div class="result-box prediction-result">
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <div class="icon-circle result-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div>
+                    <strong>Prediction Result:</strong>
+                    <p class="prediction-text">{{ prediction }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="result-box suggestion">
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <div class="icon-circle suggestion-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div>
+                    <strong>Health Suggestions:</strong>
+                    <p class="prediction-text">{{ suggestion }}</p>
+                </div>
+            </div>
+        </div>
+        
+        {% if probability %}
+        <div class="probability">
+            <i class="fas fa-percentage"></i>
+            Probability of Stroke: {{ (probability*100)|round(2) }}%
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<script>
+    function closeModal() {
+        document.getElementById("resultModal").style.display = "none";
+    }
+
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("resultModal").style.display = "flex";
+    });
+    
+</script>
+
+</body>
+</html>
