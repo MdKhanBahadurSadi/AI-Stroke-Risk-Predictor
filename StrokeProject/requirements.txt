@@ -1,5 +1,0 @@
-Flask
-numpy
-requests
-gunicorn
-scikit-learn
