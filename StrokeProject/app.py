@@ -4,18 +4,20 @@ import numpy as np
 import requests
 import json
 import os
-from custom_classes import RandomForestClassifier, DecisionTree  # <-- import custom classes
+
+# Import custom classes BEFORE pickle
+from custom_classes import RandomForestClassifier, DecisionTree
 
 app = Flask(__name__)
 
-# Load model and encoders
+# Load ML model and encoders
 try:
     with open("stroke_model.pkl", "rb") as f:
         model = pickle.load(f)
     with open("label_encoders.pkl", "rb") as f:
         encoders = pickle.load(f)
 except FileNotFoundError:
-    print("Error: Model and encoder files not found. Please ensure 'stroke_model.pkl' and 'label_encoders.pkl' are in the same directory.")
+    print("Error: Model and encoder files not found.")
     model = None
     encoders = None
 
@@ -29,9 +31,7 @@ def get_gemini_suggestion(prompt_text):
         "tools": [{"google_search": {}}],
         "systemInstruction": {
             "parts": [
-                {
-                    "text": "You are a health assistant providing general, non-medical advice. Offer actionable, positive, and simple suggestions for a healthier lifestyle based on the user's information. Do not diagnose or recommend specific treatments. Always advise consulting a healthcare professional for personalized advice."
-                }
+                {"text": "You are a health assistant providing general, non-medical advice. Offer actionable, positive, and simple suggestions for a healthier lifestyle based on the user's information. Do not diagnose or recommend specific treatments. Always advise consulting a healthcare professional for personalized advice."}
             ]
         },
     }
