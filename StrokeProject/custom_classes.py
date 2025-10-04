@@ -119,7 +119,7 @@ class RandomForestClassifier:
         return final_predictions
     
     def predict_proba(self, X):
-        print("Warning: predict_proba method is a placeholder and may not give correct results.")
+        print("Warning: predict_proba method is a placeholder.")
         predictions = np.array([tree.predict(X) for tree in self.trees])
         probabilities = []
         for i in range(predictions.shape[1]):
