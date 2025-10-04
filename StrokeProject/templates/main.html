@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -27,8 +27,8 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-    
-            background: linear-gradient(135deg, var(--background-light) 0%, var(--background-dark) 100%); 
+            background: url('https://wallpapercave.com/wp/wp11352696.jpg') no-repeat center center fixed;
+            background-size: cover;
             min-height: 100vh;
             color: var(--text-color);
             display: flex;
@@ -91,11 +91,11 @@
             box-shadow: 0 15px 40px var(--shadow-light);
             overflow: hidden;
             transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            opacity: 0.98;
+            opacity: 0.9;
         }
 
         .card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-8px);
         }
 
         .form-section {
@@ -148,14 +148,9 @@
             background-color: white;
             box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
         }
-        
-       
-        .mr-2 { margin-right: 0.5rem; }
 
         .btn-predict {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: block;
             width: 100%;
             padding: 18px 20px;
             background: linear-gradient(45deg, #2ecc71, #27ae60);
@@ -171,16 +166,10 @@
             opacity: 0.95;
         }
 
-        .btn-predict:hover:not(:disabled) {
+        .btn-predict:hover {
             background: linear-gradient(45deg, #27ae60, #2ecc71);
             transform: translateY(-4px);
             box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
-        }
-        
-        .btn-predict:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            background: #95a5a6;
         }
 
         .modal {
@@ -215,7 +204,7 @@
             animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-align: center;
             position: relative;
-            opacity: 0.98;
+            opacity: 0.95;
         }
 
         @keyframes zoomIn {
@@ -288,37 +277,29 @@
             border-radius: 50%;
             margin-right: 15px;
             font-size: 1.5rem;
+            animation: pulse 1.5s infinite ease-in-out;
         }
-        
-        
+
         .result-icon {
             color: var(--secondary-color);
             border: 2px solid var(--secondary-color);
-            animation: pulse-blue 1.5s infinite ease-in-out;
-        }
-        
-       
-        .danger {
-            color: var(--accent-color);
-            border: 2px solid var(--accent-color);
-            animation: pulse-red 1.5s infinite ease-in-out;
         }
 
         .suggestion-icon {
             color: #f39c12;
             border: 2px solid #f39c12;
+            animation: none;
         }
 
-        @keyframes pulse-blue {
+        .result-icon.danger {
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+        }
+
+        @keyframes pulse {
             0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); }
             70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(52, 152, 219, 0); }
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
-        }
-        
-        @keyframes pulse-red {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
         }
 
         .prediction-text {
@@ -340,7 +321,6 @@
     </style>
 </head>
 <body>
-
 <div class="container">
     <div class="header">
         <h1><i class="fas fa-heartbeat mr-2"></i>AI Stroke Risk Predictor</h1>
@@ -349,8 +329,7 @@
     
     <div class="card">
         <div class="form-section">
-            
-            <form id="predictionForm">
+            <form action="{{ url_for('main') }}" method="post">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="gender">Gender</label>
@@ -359,16 +338,15 @@
                             <select id="gender" name="gender" required>
                                 <option value="1">Male</option>
                                 <option value="0">Female</option>
-                                <option value="2">Other</option>
                             </select>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="age">Age (Years)</label>
+                        <label for="age">Age(Years)</label>
                         <div style="position: relative;">
                             <i class="fas fa-birthday-cake input-icon"></i>
-                            <input type="number" id="age" name="age" step="1" placeholder="Example: 45" required value="45" min="0" max="120">
+                            <input type="number" id="age" name="age" step="1" placeholder="Example: 45" required>
                         </div>
                     </div>
                     
@@ -377,8 +355,8 @@
                         <div style="position: relative;">
                             <i class="fas fa-tint input-icon"></i>
                             <select id="hypertension" name="hypertension" required>
-                                <option value="0">No</option>
                                 <option value="1">Yes</option>
+                                <option value="0">No</option>
                             </select>
                         </div>
                     </div>
@@ -388,8 +366,8 @@
                         <div style="position: relative;">
                             <i class="fas fa-heart input-icon"></i>
                             <select id="heart_disease" name="heart_disease" required>
-                                <option value="0">No</option>
                                 <option value="1">Yes</option>
+                                <option value="0">No</option>
                             </select>
                         </div>
                     </div>
@@ -410,9 +388,9 @@
                         <div style="position: relative;">
                             <i class="fas fa-briefcase input-icon"></i>
                             <select id="work_type" name="work_type" required>
+                                <option value="0">Government Job</option>
                                 <option value="2">Private</option>
                                 <option value="3">Self-employed</option>
-                                <option value="0">Government Job</option>
                                 <option value="4">Children</option>
                                 <option value="1">Never Worked</option>
                             </select>
@@ -431,10 +409,10 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="glucose">Avg Glucose Level (mg/dL)</label>
+                        <label for="glucose">Average Glucose Level(mg/dL)</label>
                         <div style="position: relative;">
                             <i class="fas fa-flask input-icon"></i>
-                            <input type="number" id="glucose" name="glucose" step="0.01" placeholder="Example: 95.0" required value="95.0" min="50" max="400">
+                            <input type="number" id="glucose" name="glucose" step="0.01" placeholder="Example: 254.0" required>
                         </div>
                     </div>
                     
@@ -442,7 +420,7 @@
                         <label for="bmi">BMI</label>
                         <div style="position: relative;">
                             <i class="fas fa-ruler-vertical input-icon"></i>
-                            <input type="number" id="bmi" name="bmi" step="0.01" placeholder="Example: 24.5" required value="24.5" min="10" max="60">
+                            <input type="number" id="bmi" name="bmi" step="0.01" placeholder="Example: 24.5" required>
                         </div>
                     </div>
                     
@@ -451,10 +429,10 @@
                         <div style="position: relative;">
                             <i class="fas fa-smoking input-icon"></i>
                             <select id="smoking" name="smoking" required>
-                                <option value="2">Never Smoked</option>
-                                <option value="1">Formerly Smoked</option>
-                                <option value="3">Smokes</option>
                                 <option value="0">Unknown</option>
+                                <option value="1">Formerly Smoked</option>
+                                <option value="2">Never Smoked</option>
+                                <option value="3">Smokes</option>
                             </select>
                         </div>
                     </div>
@@ -468,7 +446,8 @@
     </div>
 </div>
 
-<div id="resultModal" class="modal">
+{% if prediction %}
+<div id="resultModal" class="modal" style="display: flex;">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">&times;</span>
         <h2><i class="fas fa-chart-line mr-2"></i>Your Health Assessment</h2>
@@ -480,15 +459,17 @@
                 </div>
                 <div>
                     <strong>Prediction Result:</strong>
-                    <p id="predictionText" class="prediction-text">Prediction will appear here.</p>
+                    <p class="prediction-text">{{ prediction }}</p>
                 </div>
             </div>
         </div>
         
+        {% if probability %}
         <div class="probability">
             <i class="fas fa-percentage"></i>
-            <span id="probabilityValue">Probability of Stroke: 0.00%</span>
+            Probability of Stroke: {{ (probability*100)|round(2) }}%
         </div>
+        {% endif %}
 
         <div class="result-box suggestion">
             <div style="display: flex; align-items: center; justify-content: center;">
@@ -497,258 +478,36 @@
                 </div>
                 <div>
                     <strong>Health Suggestions:</strong>
-                    <p id="suggestionText" class="prediction-text">Suggestions based on your profile will be shown here.</p>
+                    <p class="prediction-text">{{ suggestion }}</p>
                 </div>
             </div>
         </div>
-    </div> 
-</div>
 
-<script type="module">
-    
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    </div> </div>
+{% endif %}
 
-    
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+<script>
+    const modal = document.getElementById("resultModal");
 
-    let app;
-    let db;
-    let auth;
-    let userId;
-
-    
-    async function setupFirebase() {
-        if (!firebaseConfig) {
-            console.error("Firebase config is missing.");
-            return;
-        }
-
-        try {
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-            setLogLevel('debug'); // Enable logging
-
-            
-            if (initialAuthToken) {
-                await signInWithCustomToken(auth, initialAuthToken);
-            } else {
-                await signInAnonymously(auth);
-            }
-
-            userId = auth.currentUser?.uid || crypto.randomUUID();
-            console.log("Firebase initialized. User ID:", userId);
-        } catch (error) {
-            console.error("Firebase initialization or authentication failed:", error);
-            
-            userId = crypto.randomUUID();
-        }
-    }
-
-    
-    async function simulateLlmSuggestions(formData, riskScore) {
-        
-
-        const isHighRisk = riskScore > 0.25; 
-        let suggestionText = "Maintain a balanced diet, exercise regularly (at least 150 minutes of moderate-intensity activity per week), and schedule annual preventative check-ups with your doctor.";
-
-        if (isHighRisk) {
-            suggestionText = "⚠ **CRITICAL ALERT:** Your risk profile is significantly elevated due to high-impact factors. You must **consult a cardiologist immediately**. Focus on aggressive management of **Hypertension** and **Glucose** through prescribed medication and specialized dietary changes.";
-        } else if (formData.age >= 60 && formData.glucose >= 100) {
-            suggestionText = "Given your age and glucose level, prioritize heart health: monitor your blood pressure daily, reduce sodium and sugar intake, and aim for a low-impact exercise routine like brisk walking.";
-        } else if (formData.bmi >= 28) {
-             suggestionText = "Your BMI suggests you should focus on **weight management**. Small, sustainable weight loss (5-10%) can significantly lower blood pressure and improve overall cardiovascular markers. Consult a nutritionist.";
-        } else if (formData.smoking === 3) {
-             suggestionText = "Active smoking dramatically increases stroke risk. Your most effective preventative step is to **quit smoking immediately**. Seek smoking cessation resources for support.";
-        }
-
-        return { text: suggestionText };
-    }
-
-    
-    function simulatePrediction(data) {
-        let riskScore = 0.02; // Base risk (2%)
-
-        
-        if (data.age >= 65) riskScore += 0.25;
-        else if (data.age >= 45) riskScore += 0.10;
-
-        if (data.hypertension === 1) riskScore += 0.18;
-        if (data.heart_disease === 1) riskScore += 0.20;
-
-        
-        if (data.glucose >= 140) riskScore += 0.15; 
-        else if (data.glucose >= 100) riskScore += 0.08; 
-        if (data.bmi >= 30) riskScore += 0.10;
-
-        if (data.smoking === 3) riskScore += 0.12; 
-        
-        if (data.work_type === 4) riskScore -= 0.01;
-        if (data.gender === 2) riskScore -= 0.01;
-        
-        
-        riskScore = Math.min(riskScore, 0.80);
-
-        const isHighRisk = riskScore > 0.20; 
-
-        const predictionText = isHighRisk 
-            ? "High Risk: Your calculated factors indicate an elevated risk. Immediate professional consultation is vital." 
-            : "Low to Moderate Risk: Your profile is relatively favorable, but vigilance and healthy habits are essential for prevention.";
-
-        return { riskScore: riskScore, predictionText: predictionText };
-    }
-
-
-    
-    async function predictRisk(event) {
-        event.preventDefault();
-        const form = event.target;
-        const button = form.querySelector('.btn-predict');
-
-        
-        const formData = {
-            gender: parseInt(form.gender.value),
-            age: parseFloat(form.age.value),
-            hypertension: parseInt(form.hypertension.value),
-            heart_disease: parseInt(form.heart_disease.value),
-            ever_married: parseInt(form.ever_married.value),
-            work_type: parseInt(form.work_type.value),
-            residence: form.residence.value,
-            glucose: parseFloat(form.glucose.value),
-            bmi: parseFloat(form.bmi.value),
-            smoking: parseInt(form.smoking.value),
-        };
-
-        
-        if (formData.age < 0 || formData.age > 120) {
-            showValidationMessage("Age must be between 0 and 120 years.");
-            return;
-        }
-        
-        if (formData.glucose < 50 || formData.glucose > 400) {
-            showValidationMessage("Glucose level seems outside a realistic range (e.g., 50-400 mg/dL). Please check your input.");
-            return;
-        }
-        if (formData.bmi < 10 || formData.bmi > 60) {
-            showValidationMessage("BMI seems outside a realistic range (e.g., 10-60). Please check your input.");
-            return;
-        }
-
-        
-        const originalButtonHtml = button.innerHTML;
-        button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Calculating...';
-        button.disabled = true;
-
-        
-        await new Promise(resolve => setTimeout(resolve, 1000)); 
-
-        try {
-            
-            const predictionResult = simulatePrediction(formData);
-            
-            
-            const suggestionResult = await simulateLlmSuggestions(formData, predictionResult.riskScore);
-
-           
-            updateModalContent(
-                predictionResult.predictionText, 
-                predictionResult.riskScore, 
-                suggestionResult.text
-            );
-            showModal();
-        } catch(error) {
-            console.error("Prediction failed:", error);
-            showValidationMessage("An internal error occurred during calculation. Please check console for details.");
-        }
-
-
-        
-        button.innerHTML = originalButtonHtml;
-        button.disabled = false;
-    }
-
-    
-    function updateModalContent(predictionText, probability, suggestionText) {
-        const modal = document.getElementById("resultModal");
-        const predictionEl = modal.querySelector('#predictionText');
-        const probabilityEl = modal.querySelector('#probabilityValue');
-        const suggestionEl = modal.querySelector('#suggestionText');
-        const iconCircle = modal.querySelector('.icon-circle');
-
-        
-        predictionEl.innerHTML = predictionText;
-        probabilityEl.textContent = `Probability of Stroke: ${(probability * 100).toFixed(2)}%`;
-        suggestionEl.innerHTML = suggestionText;
-
-        
-        const isHighRisk = probability > 0.20; 
-        
-        
-        iconCircle.classList.remove('danger', 'result-icon');
-
-        if (isHighRisk) {
-            iconCircle.classList.add('danger');
-            iconCircle.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-        } else {
-            iconCircle.classList.add('result-icon');
-            iconCircle.innerHTML = '<i class="fas fa-check"></i>';
-        }
-    }
-
-    
-    function showModal() {
-        const modal = document.getElementById("resultModal");
-        if (modal) {
-            modal.style.display = "flex";
-        }
-    }
-
-    
-    window.closeModal = function() {
-        const modal = document.getElementById("resultModal");
+    function closeModal() {
         if (modal) {
             modal.style.display = "none";
         }
     }
 
-    
-    function showValidationMessage(message) {
-        updateModalContent(
-            "Input Error / System Alert", 
-            0.00, 
-            message
-        );
-        const iconCircle = document.getElementById("resultModal").querySelector('.icon-circle');
-        iconCircle.classList.remove('result-icon');
-        iconCircle.classList.add('danger');
-        iconCircle.innerHTML = '<i class="fas fa-bug"></i>';
-        showModal();
+    if (modal) {
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
     }
 
-    
     document.addEventListener("DOMContentLoaded", function() {
-        setupFirebase();
-
-        const form = document.getElementById("predictionForm");
-        if (form) {
-            form.addEventListener('submit', predictRisk);
-        }
-
-        
-        const modal = document.getElementById("resultModal");
         if (modal) {
-            modal.addEventListener('click', function(event) {
-                if (event.target === modal) {
-                    closeModal();
-                }
-            });
+            modal.style.display = "flex";
         }
     });
-
 </script>
 
 </body>
