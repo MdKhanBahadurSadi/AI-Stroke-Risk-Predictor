@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Stroke Risk Predictor - Loading</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0E1321;
+            --primary-color: #4A90E2;
+            --secondary-color: #E91E63;
+            --font-color: #E0E0E0;
+            --logo-pulse-duration: 2s;
+            --loader-duration: 2.5s;
+        }
+
+        body {
+            background: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            color: var(--font-color);
+            transition: opacity 0.5s ease-out;
+        }
+
+        .splash-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .logo-icon {
+            font-size: 5rem;
+            color: var(--primary-color);
+            position: relative;
+            z-index: 2;
+        }
+
+        .icon-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: pulse-ring var(--logo-pulse-duration) infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .icon-pulse-2 {
+            animation-delay: calc(var(--logo-pulse-duration) / -2);
+        }
+
+        .logo-text {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-left: 25px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .loading-container {
+            position: relative;
+            width: 250px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            border-radius: 2px;
+            animation: loading-bar-grow var(--loader-duration) infinite ease-in-out;
+        }
+
+        .loading-text {
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 15px;
+            animation: pulseText 1.5s infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 0.6; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        @keyframes loading-bar-grow {
+            0% { width: 0%; left: 0%; }
+            50% { width: 100%; left: 0%; }
+            100% { width: 0%; left: 100%; }
+        }
+
+        @keyframes pulseText {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.02); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-screen">
+        <div class="logo-container">
+            <div class="icon-pulse"></div>
+            <div class="icon-pulse icon-pulse-2"></div>
+            <i class="fas fa-heartbeat logo-icon"></i>
+            <span class="logo-text">AI Stroke Risk Predictor</span>
+        </div>
+        <div class="loading-container">
+            <div class="loading-bar"></div>
+        </div>
+        <p class="loading-text">Loading...</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                window.location.href = 'verification.html';
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
