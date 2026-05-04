@@ -7,15 +7,11 @@ A sophisticated web application that leverages Machine Learning to predict strok
 ## 📸 Visual Overview
 
 ### 🎨 App Showcase
-````carousel
-![Splash Screen](screenshots/splash.png)
-<!-- slide -->
-![Verification Page](screenshots/verification.png)
-<!-- slide -->
-![Input Interface](screenshots/input.png)
-<!-- slide -->
-![Prediction Result](screenshots/result.png)
-````
+| ![Splash Screen](screenshots/splash.png) | ![Verification Page](screenshots/verification.png) |
+|:---:|:---:|
+| **Splash Screen** | **Verification Page** |
+| ![Input Interface](screenshots/input.png) | ![Prediction Result](screenshots/result.png) |
+| **Input Interface** | **Prediction Result** |
 
 ---
 
